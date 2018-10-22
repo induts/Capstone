@@ -14,7 +14,7 @@ Another option is to compare emission from different states and provide a themat
 ## Data Model
 The data I need to store are State, Year range, Type of gas, and chart type.
 ## Schedule
-Week 1: Create the project and necessary files. Build models and views.
+Week 1: Load the .csv data file ,Create the project and necessary files. Build models and views.
 Week 2: Create divs, input fields and templates,Chart features, dropdowns, and input fields in templates. Add charts/maps and test.
 Week 3: Connect input and divs with Javascript for dropdowns and sliding divs. Final modifications
 After class: I want user to be able to permanently store the charts they created. So for that I want to add a login system
