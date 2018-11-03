@@ -1,7 +1,4 @@
-Year,State,Producer Type,Energy Source,"CO2
-(Metric Tons)","SO2
-(Metric Tons)","NOx
-(Metric Tons)"
+Year,State,Producer Type,Energy Source,"CO2","SO2","NOx"
 1990,AK,Commercial Cogen,All Sources,"824,004","13,198","3,011"
 1990,AK,Commercial Cogen,Coal,"821,929","13,191","3,009"
 1990,AK,Commercial Cogen,Petroleum,"2,075",6,2

@@ -1,3 +1,7 @@
 from django.contrib import admin
+from .models import State,ProducerType,EnergySource,GreenHouseGases
 
-# Register your models here.
+admin.site.register(State)
+admin.site.register(ProducerType)
+admin.site.register(EnergySource)
+admin.site.register(GreenHouseGases)
