@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Generate button</title>
+    <body>
+        <h2>Energy Source</h2>
+        <table>
+        {% for source in EnergySource %}
+            <tr>
+                <td></td>
+                <td>
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <input name="All source" value="{{source.name}}"/>
+                        <button type="submit">select</button>
+                    </form>
+                </td>
+            </tr>
+        {% endfor %}
+        </table>
+        <h2>ProducerType</h2>
+            <table>
+            {% for ptype in ProducerType %}
+                <tr>
+                    <td></td>
+                    <td>
+                        <form action="" method="post">
+                            {% csrf_token %}
+                            <input name="ProducerType" value="{{type.name}}"/>
+                            <button type="submit">select</button>
+                        </form>
+                    </td>
+                </tr>
+            {% endfor %}
+            </table>
+    </body>
+</html>
