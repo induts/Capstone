@@ -4,35 +4,49 @@
     <meta charset="UTF-8">
     <title>Generate button</title>
     <body>
+        <form action="" method="post">
         <h2>Energy Source</h2>
-        <table>
-        {% for source in EnergySource %}
-            <tr>
-                <td></td>
-                <td>
-                    <form action="" method="post">
-                        {% csrf_token %}
-                        <input name="All source" value="{{source.name}}"/>
-                        <button type="submit">select</button>
-                    </form>
-                </td>
-            </tr>
-        {% endfor %}
-        </table>
-        <h2>ProducerType</h2>
-            <table>
-            {% for ptype in ProducerType %}
-                <tr>
-                    <td></td>
-                    <td>
-                        <form action="" method="post">
-                            {% csrf_token %}
-                            <input name="ProducerType" value="{{type.name}}"/>
-                            <button type="submit">select</button>
-                        </form>
-                    </td>
-                </tr>
+        <select>
+            {% for source in EnergySource %}
+               <option value="{{source.id}}">{{source.name}}</option>
+               <button type="submit">select</button>
             {% endfor %}
-            </table>
-    </body>
+         </select>
+
+        <h2>Greenhouse gases</h2>
+            {% csrf_token %}
+            <select>
+                {% for greenhousegas in GreenhouseGas %}
+                    <option value = "{{greenhousegas}}">{{greenhousegas}}</option>
+                    <button type="submit">select</button>
+                {% endfor %}
+
+            </select>
+
+        <h2>ProducerType</h2>
+
+            {% csrf_token %}
+            <select>
+                {% for producertype in ProducerType %}
+                   <option value="{{producertype.id}}">{{producertype.name}}</option>
+                   <button type="submit">select</button>
+                {% endfor %}
+             </select>
+
+        <h2>State</h2>
+        <select>
+            {% for state in State %}
+               <option value="{{state.id}}">{{state.name}}</option>
+            {% endfor %}
+         </select>
+        <h2>Year</h2>
+
+            {% csrf_token %}
+            <select>
+                {% for year in Year %}
+                   <option value="{{year}}">{{year}}</option>
+                {% endfor %}
+             </select>
+        </form>
+        </body>
 </html>
