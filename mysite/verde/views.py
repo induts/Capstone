@@ -4,6 +4,14 @@ import datetime
 from .models import EnergySource,ProducerType,GreenHouseGases,State
 import json
 #
+
+def home(request):
+    return render(request, 'verde/Home.html', {})
+
+
+def about(request):
+    return render(request, 'verde/about.html', {})
+
 def index(request):
     sources = EnergySource.objects.all()
     out_sources = []
