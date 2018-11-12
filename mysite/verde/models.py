@@ -27,7 +27,13 @@ class GreenHouseGases(models.Model):
     SO2 = models.IntegerField()
     NOx = models.IntegerField()
     year = models.IntegerField()
+
     def __str__(self):
         return f"{self.state} - {self.producer_type} - {self.CO2} - {self.year}"
+
+    def to_dictionary(self):
+        out_dict = {'state': self.state.name,'EnergySource':self.energy_source.name,'Producertype':self.producer_type.name,'year':self.year,'CO2':self.CO2,'SO2':self.SO2,'NOx':self.NOx }
+
+        return out_dict
 
 

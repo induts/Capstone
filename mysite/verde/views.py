@@ -2,7 +2,7 @@ from django.http import HttpResponse,JsonResponse
 from django.shortcuts import render
 import datetime
 from .models import EnergySource,ProducerType,GreenHouseGases,State
-
+import json
 #
 def index(request):
     sources = EnergySource.objects.all()
@@ -42,27 +42,6 @@ def index(request):
     #  return render(request, 'verde/index2.html',{'EnergySource':out_sources,'ProducerType': out_types,'State':out_states,'Greenhousegas':out_greengas})
     return render(request, 'verde/index2.html',{'EnergySource':out_sources,'ProducerType': out_types,'State':out_states,'Year':year,'GreenhouseGas':ghgas} )
 
-# def get_data(request):
-#     print(request)
-#     data = json.loads(request.body)
-#     state_obj = State.objects.get(pk=data['state'])
-#     energy_obj = EnergySource.objects.get(pk=data['EnergySource'])
-#     ptype_obj = ProducerType.objects.get(pk=data['ProducerType'])
-#     gas = GreenHouseGases.objects.all()
-#     print(f" the gases are {gas}")
-#     if show_obj != None:
-#         people = people.filter(fav_tv=show_obj)
-#     print(f"after first filter {people}")
-#     if color_obj != None:
-#         people = people.filter(fav_color=color_obj)
-#     print(f"after second filter {people}")
-#     data = {'people': []}
-#     for person in people:
-#         data['people'].append({'name': person.name})
-#     return JsonResponse(data)
-
-
-
 def get_data(request):
     # get the filter parameters from the query string
     #    localhost:8000?energy_source_id=3&producer_type_id=1
@@ -70,6 +49,26 @@ def get_data(request):
     # use the filter parameters to filter the data
     # convert the data into a list of dictionaries
     # return it in a json response
-    gender_id = request.GET['gender_id']
-    return JsonResponse({'message': 'ok'})
+    producer_type_id =request.GET.get('producertype', '')
+    energy_source_id = request.GET.get('energysource', '')
+    state_id = request.GET.get('state'
+                               '', '')
+    items=GreenHouseGases.objects.all()
+    print(producer_type_id)
 
+    if producer_type_id != '':
+        items = items.filter(producer_type_id=producer_type_id)
+    if energy_source_id != '':
+        items = items.filter(energy_source_id=energy_source_id)
+    else:
+        items = items.filter(energy_source_id=1)
+    if state_id != '':
+        items = items.filter(state_id=state_id)
+
+    items = items[:100]
+    print(items)
+
+    data = []
+    for item in items:
+        data.append(item.to_dictionary())
+    return JsonResponse({'data': data})

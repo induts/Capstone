@@ -1,52 +1,140 @@
+{% load static %}
+
+<link rel="stylesheet" type="text/css" href="{% static 'verde/style.css' %}">
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Generate button</title>
+    <head>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
+        <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+    </head>
+        <meta charset="UTF-8">
+        <title>Select</title>
+
+    </head>
+
     <body>
-        <form action="" method="post">
-        <h2>Energy Source</h2>
-        <select>
-            {% for source in EnergySource %}
-               <option value="{{source.id}}">{{source.name}}</option>
-               <button type="submit">select</button>
-            {% endfor %}
-         </select>
-
-        <h2>Greenhouse gases</h2>
-            {% csrf_token %}
-            <select>
-                {% for greenhousegas in GreenhouseGas %}
-                    <option value = "{{greenhousegas}}">{{greenhousegas}}</option>
-                    <button type="submit">select</button>
-                {% endfor %}
-
-            </select>
-
-        <h2>ProducerType</h2>
-
-            {% csrf_token %}
-            <select>
-                {% for producertype in ProducerType %}
-                   <option value="{{producertype.id}}">{{producertype.name}}</option>
-                   <button type="submit">select</button>
-                {% endfor %}
-             </select>
-
+    <div class="w3-container">
         <h2>State</h2>
-        <select>
+        <select name="state" id="state">
             {% for state in State %}
                <option value="{{state.id}}">{{state.name}}</option>
             {% endfor %}
          </select>
-        <h2>Year</h2>
+    </div>
 
-            {% csrf_token %}
-            <select>
-                {% for year in Year %}
-                   <option value="{{year}}">{{year}}</option>
-                {% endfor %}
-             </select>
-        </form>
-        </body>
+        <h2>ProducerType</h2>
+        <select name="producertype" id="producertype">
+            {% for producertype in ProducerType %}
+               <option value="{{producertype.id}}">{{producertype.name}}</option>
+
+            {% endfor %}
+         </select>
+
+        <h2>Energy Source</h2>
+        <select name="energysource" id="energysource">
+            {% for source in EnergySource %}
+               <option value="{{source.id}}">{{source.name}}</option>
+            {% endfor %}
+         </select>
+
+        <!--<h2>Greenhouse gases</h2>-->
+
+        <!--<select>-->
+            <!--{% for greenhousegas in GreenhouseGas %}-->
+                <!--<option value = "{{greenhousegas}}">{{greenhousegas}}</option>-->
+
+            <!--{% endfor %}-->
+        <!--</select>-->
+<div id="myDiv"></div>
+        <button id="generate_chart_bt">Generate Chart</button>
+        <script>
+            window.onload = function() {
+                let select_energysource = document.querySelector('#energysource')
+                let select_producertype = document.querySelector('#producertype')
+                let select_state = document.querySelector('#state')
+                let btn = document.querySelector('#generate_chart_bt')
+                btn.onclick = function() {
+                    let out_energysource = select_energysource.options[select_energysource.selectedIndex].value
+                    let out_producertype = select_producertype.options[select_producertype.selectedIndex].value
+                    let out_state = select_state.options[select_state.selectedIndex].value
+                    let url = "{% url 'verde:get_data' %}";
+                    let csrf_token = '{{ csrf_token }}';
+
+                    axios.get(url, {
+                        params: {energysource: out_energysource, producertype: out_producertype, state: out_state}
+                    }, {
+                        headers: {'X-CSRFToken': csrf_token}
+                    })
+                        .then(function (response) {
+                            console.log(response)
+                            console.log(response.data)
+                            var year =[]
+                            var Co2 =[]
+                            var So2 =[]
+                            var Nox =[]
+                            var i = 0;
+                            var len = response.data.data.length;
+                            for (; i < len; ) {
+                                year.push(response.data.data[i].year)
+                                Co2.push(response.data.data[i].CO2)
+                                So2.push(response.data.data[i].SO2)
+                                Nox.push(response.data.data[i].NOx)
+                                i++;
+}
+                            // console.log(response.data.data[0].CO2)
+                            // console.log(year)
+                            // console.log(Co2)
+                            // console.log(So2)
+                            // console.log(Nox)
+                            var trace1 = {
+                                x: year,
+                                y: Co2,
+                                mode: 'lines+markers',
+                                type: 'scatter',
+                                name: 'CO2 (in thousands)',
+                                text: ['CO2', 'CO2'],
+                                marker: {size: 8}
+                            };
+                            var trace2 = {
+                                x: year,
+                                y: So2,
+                                mode: 'lines+markers',
+                                type: 'scatter',
+                                name: 'SO2',
+                                text: ['SO2', 'SO2'],
+                                marker: {size: 8}
+                            };
+                            var trace3 = {
+                                x: year,
+                                y: Nox,
+                                mode: 'lines+markers',
+                                type: 'scatter',
+                                name: 'NOx)',
+                                text: ['CO2', 'CO2'],
+                                marker: {size: 8}
+                            };
+                            var data = [ trace1,trace2,trace3];
+
+                            var layout = {
+                             xaxis: {
+                                range: [1990, 2016]
+                             },
+                             yaxis: {
+                                 range: [0, 10000]
+                             },
+                            title:'Green house gases'
+
+                        };
+
+                            Plotly.newPlot('myDiv', data, layout);
+                        })
+                }
+            }
+            // button click event
+            // get the filter values out of the input fields
+            // use axios to do a GET request to the server
+            // use the resulting data to build a chart using plotly
+        </script>
+    </body>
 </html>
