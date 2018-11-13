@@ -4,3 +4,12 @@ body {
     font-family: 'Open Sans';
     font-size: 18px;
 }
+
+.container{
+    display: flex;
+    flex-direction: row;
+}
+
+.container > * {
+    padding:10px;
+}
