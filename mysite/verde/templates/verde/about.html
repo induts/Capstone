@@ -3,12 +3,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <link rel="stylesheet" type="text/css" href="{% static 'verde/style.css' %}">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'verde/style2.css' %}">
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>About</title>
 </head>
 <body>
-<p> Hi there</p>
+<header>
+    <h1 align="center">About Verde</h1>
+    <div class="topnav">
+        <a href="{% url 'verde:Home'  %}" style="float:left">Home</a>
+        <a href="{% url 'verde:about'  %}">About</a>
+        <a href="{% url 'verde:chart'  %}">Graphs</a>
+    </div>
+</header>
+<div>
+    <div class="row">
+        <div>
+            <h3>About Verde</h3>
+        </div>
+    </div>
+    <div class="row">
+        <div>
+            <p> Verde is Indu Thekkemeppilly Sivakumar's Capstone Project, a finale of
+                twelve weeks long full stack Python- based developer bootcamp at PDX Code Guild.
+            </p>
+            <p>This project uses Django, which connects the database, SQLite,with Python and the frontend.
+                The front-end languages used are: JavaScript, CSS, and HTML5.
+                Plot.ly for Javascript was used to display the graphs.</p>
+             </p>
+        </div>
+        <div class="row">
+            <div class="col s4"></div>
+            <div class="col s5"><a href="{% url 'verde:chart'  %}">
+                <btn class="waves-effect waves-light btn-large"><h5>Create a Graph</h5></btn>
+            </a>
+            </div>
+            <div class="col s3"></div>
+        </div>
+    </div>
+
 
 </body>
-</html>

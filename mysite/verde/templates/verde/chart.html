@@ -1,0 +1,185 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.18.0/axios.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="{% static 'verde/style2.css' %}">
+    <meta charset="UTF-8">
+    <title>Select</title>
+</head>
+
+<body>
+<header>
+    <h1 align="center"> Emission from energy production </h1>
+    <div class="topnav">
+        <a href="{% url 'verde:Home'  %}" style="float:left">Home</a>
+        <a href="{% url 'verde:about'  %}">About</a>
+        <a href="{% url 'verde:chart'  %}">Graphs</a>
+    </div>
+</header>
+
+<div class="container">
+    <label>State</label>
+    <select id="state">
+        {% for state in State %}
+        <option value="{{state.id}}">{{state.name}}</option>
+        {% endfor %}
+    </select>
+
+
+    <label>ProducerType</label>
+    <select id="producertype">
+        {% for producertype in ProducerType %}
+        <option value="{{producertype.id}}">{{producertype.name}}</option>
+
+        {% endfor %}
+    </select>
+
+    <label>Energy Source</label>
+    <select id="energysource">
+        {% for source in EnergySource %}
+        <option value="{{source.id}}">{{source.name}}</option>
+        {% endfor %}
+    </select>
+    <label> Chart type</label>
+    <select id="chart">
+        <option value= '1'>Scatter/Line</option>
+        <option value= '2'>Bar</option>
+    </select>
+    <button id="generate_chart_bt">Generate Chart</button>
+</div>
+
+<div id="chart_div"></div>
+<!--<h2>Greenhouse gases</h2>-->
+
+<!--<select>-->
+<!--{% for greenhousegas in GreenhouseGas %}-->
+<!--<option value = "{{greenhousegas}}">{{greenhousegas}}</option>-->
+
+<!--{% endfor %}-->
+<!--</select>-->
+
+    <script>
+        window.onload = function () {
+            let select_energysource = document.querySelector('#energysource')
+            let select_producertype = document.querySelector('#producertype')
+            let select_state = document.querySelector('#state')
+            let select_chart = document.querySelector('#chart')
+            let btn = document.querySelector('#generate_chart_bt')
+
+            btn.onclick = function () {
+                let out_energysource = select_energysource.options[select_energysource.selectedIndex].value
+                let out_producertype = select_producertype.options[select_producertype.selectedIndex].value
+                let out_state = select_state.options[select_state.selectedIndex].value
+                let out_chart = select_chart.options[select_chart.selectedIndex].value
+                let url = "{% url 'verde:get_data' %}";
+                let csrf_token = '{{ csrf_token }}';
+
+                axios.get(url, {
+                    params: {energysource: out_energysource, producertype: out_producertype, state: out_state,chart:out_chart}
+                }, {
+                    headers: {'X-CSRFToken': csrf_token}
+                })
+                    .then(function (response) {
+                        console.log(response)
+                        console.log(response.data)
+                        var year = []
+                        var Co2 = []
+                        var So2 = []
+                        var Nox = []
+                        var i = 0;
+                        var len = response.data.data.length;
+                        for (; i < len;) {
+                            year.push(response.data.data[i].year)
+                            Co2.push(response.data.data[i].CO2)
+                            So2.push(response.data.data[i].SO2)
+                            Nox.push(response.data.data[i].NOx)
+                            i++;
+                        }
+                        if (out_chart == '1') {
+
+                            var trace1 = {
+                                x: year,
+                                y: Co2,
+                                mode: 'lines+markers',
+                                type: 'scatter',
+                                name: 'CO2',
+                                text: ['CO2', 'CO2'],
+                                marker: {size: 8}
+                            };
+                            var trace2 = {
+                                x: year,
+                                y: So2,
+                                mode: 'lines+markers',
+                                type: 'scatter',
+                                name: 'SO2',
+                                text: ['SO2', 'SO2'],
+                                marker: {size: 8}
+                            };
+                            var trace3 = {
+                                x: year,
+                                y: Nox,
+                                mode: 'lines+markers',
+                                type: 'scatter',
+                                name: 'NOx',
+                                text: ['NOx', 'NOx'],
+                                marker: {size: 8}
+                            };
+                        }
+                        else if(out_chart==2){
+
+                            var trace1 = {
+                                x: year,
+                                y: Co2,
+                                // mode: 'lines+markers',
+                                type: 'bar',
+                                name: 'CO2',
+                                text: ['CO2', 'CO2'],
+                                marker: {size: 8}
+                            };
+                            var trace2 = {
+                                x: year,
+                                y: So2,
+                                // mode: 'lines+markers',
+                                type: 'bar',
+                                name: 'SO2',
+                                text: ['SO2', 'SO2'],
+                                marker: {size: 8}
+                            };
+                            var trace3 = {
+                                x: year,
+                                y: Nox,
+                                // mode: 'lines+markers',
+                                type: 'bar',
+                                name: 'NOx',
+                                text: ['NOx', 'NOx'],
+                                marker: {size: 8}
+                            };
+                        }
+                        var data = [trace1, trace2, trace3];
+                        state_array = ['AK', 'AL', 'AR', 'AZ', 'CA', 'CO', 'CT', 'DC', 'DE', 'FL', 'GA', 'HI', 'IA', 'ID', 'IL', 'IN', 'KS', 'KY', 'LA', 'MA', 'MD', 'ME', 'MI', 'MN', 'MO', 'MS', 'MT', 'NC', 'ND', 'NE', 'NH', 'NJ', 'NM', 'NV', 'NY', 'OH', 'OK', 'OR', 'PA', 'PR', 'RI', 'SC', 'SD', 'TN', 'TX', 'US-TOTAL', 'UT', 'VA', 'VT', 'WA', 'WI', 'WV', 'WY']
+                        energy_arr = ['All Sources', 'Coal', 'Petroleum','Natural Gas','Other','Geothermal','Other Biomass','Wood and wood derived fuels','Other']
+                        producer_array = ['Commercial Cogen', 'Commercial Non-Cogen', 'Electric Utility', 'Industrial Cogen', 'Industrial Non-Cogen', 'Total Electric Power Industry', 'IPP NAICS-22 Cogen', 'IPP NAICS-22 Non-Cogen']
+                        var layout = {
+                            xaxis: {
+                                range: [1990, 2016],
+                                title:'Year'
+
+                            },
+                            yaxis: {
+                                 type: 'log',
+                                 autorange: true,
+                                title:'Emission in metric tons'
+                            },
+                            title: 'Greenhouse gases' +'-'+ state_array[out_state-54] +'-'+producer_array[out_producertype-1] +'-'+ energy_arr[out_energysource - 1]
+                        };
+
+                        Plotly.newPlot('chart_div', data, layout);
+                    })
+            }
+        }
+    </script>
+</body>
+</html>

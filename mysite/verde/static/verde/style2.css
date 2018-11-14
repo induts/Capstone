@@ -1,5 +1,7 @@
 body {
-
+    background-image: url("https://sagemetering.com/wp-content/uploads/2012/12/ghg-emissions-reporting.jpg");
+    background-size: cover;
+    font-family: 'Open Sans';
     font-size: 18px;
 }
 
@@ -27,7 +29,7 @@ body {
         /* Style the top navigation bar */
         .topnav {
             overflow: hidden;
-            background-color: darkgrey;
+
         }
 
         /* Style the topnav links */

@@ -12,7 +12,7 @@ def home(request):
 def about(request):
     return render(request, 'verde/about.html', {})
 
-def index(request):
+def chart(request):
     sources = EnergySource.objects.all()
     out_sources = []
     for source in sources:
@@ -47,8 +47,8 @@ def index(request):
     #     out_greengas.append(gas)
     # print(out_greengas)
 
-    #  return render(request, 'verde/index2.html',{'EnergySource':out_sources,'ProducerType': out_types,'State':out_states,'Greenhousegas':out_greengas})
-    return render(request, 'verde/index2.html',{'EnergySource':out_sources,'ProducerType': out_types,'State':out_states,'Year':year,'GreenhouseGas':ghgas} )
+
+    return render(request, 'verde/chart.html',{'EnergySource':out_sources,'ProducerType': out_types,'State':out_states,'Year':year,'GreenhouseGas':ghgas} )
 
 def get_data(request):
     # get the filter parameters from the query string
