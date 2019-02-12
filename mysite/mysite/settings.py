@@ -25,7 +25,9 @@ SECRET_KEY = ')ev+a=2fat^jy!tn7)--^jkvo1v!tzck0t_4j$e_@y7kx=h476'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'verde.pdxstudents.com'
+]
 
 
 # Application definition
@@ -119,3 +121,4 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static_root')
